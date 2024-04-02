@@ -5,7 +5,7 @@ using UnityEngine;
 public class danBan : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float tocdodan =0.1f;
+    public float tocdodan = 0.1f, huong;
     void Start()
     {
         
@@ -14,6 +14,6 @@ public class danBan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x+tocdodan * -1, transform.position.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x+tocdodan * huong, transform.position.y, transform.position.z);
     }
 }

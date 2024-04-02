@@ -15,12 +15,14 @@ public class randomMap : MonoBehaviour
     Vector3 nextPos; //Vi tri tiep theo
 
 
-    int groundLen;
+    private int groundLen, groundHei;
+
+    public GameObject plantPrefab, boarPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        endPos = new Vector3(22.0f, -1.0f, 0.0f);
+        endPos = new Vector3(22.0f, -6.0f, 0.0f);
 
         generateBlockMap();
     }
@@ -46,7 +48,7 @@ public class randomMap : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             float khoangCach = Random.Range(2f, 5f); //Khoảng cách ngẫu nhiên giữa các block
-            nextPos = new Vector3(endPos.x + khoangCach, -2f, 0f);
+            nextPos = new Vector3(endPos.x + khoangCach, -6f, 0f);
 
             //Tạo số nguyên ngẫu nhiên trong khoảng từ a-b, không bao gồm b
             int groundID = Random.Range(0, listGround.Count);
@@ -57,14 +59,23 @@ public class randomMap : MonoBehaviour
 
             switch (groundID)
             {
-                case 0: groundLen = 3; break;
-                case 1: groundLen = 3; break;
-                case 2: groundLen = 5; break;
-                case 3: groundLen = 7; break;
-                case 4: groundLen = 10; break;
+                case 0: groundLen = 3; groundHei = 3; break;
+                case 1: groundLen = 3; groundHei = 3; break;
+                case 2: groundLen = 5; groundHei = 3; break;
+                case 3: groundLen = 7; groundHei = 3; break;
+                case 4: groundLen = 10; groundHei = 2; break;
+            }
+            float xacSuat = Random.Range(0, 1f);
+            if (xacSuat < 0.3f)
+            {
+                Instantiate(plantPrefab, new Vector3(nextPos.x + 1, nextPos.y + groundHei, 0), Quaternion.identity);
+            } 
+            else if (xacSuat > 0.7f)
+            {
+                Instantiate(boarPrefab, new Vector3(nextPos.x + 1, nextPos.y + groundHei, 0), Quaternion.identity);
             }
 
-            endPos = new Vector3(nextPos.x + groundLen, -2f, 0f);
+            endPos = new Vector3(nextPos.x + groundLen, -6f, 0f);
         }
     }
 }

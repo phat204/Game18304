@@ -45,7 +45,7 @@ public class SpawmCoin : MonoBehaviour
             //float viTriX = player.position.x + 12f;
 
             float viTriX = player.position.x + Random.Range(30f, 35f);
-            float viTriY = 0.9f * Mathf.Sin(viTriX) + 0.5f;
+            float viTriY = 0.5f * Mathf.Sin(viTriX) - 0.5f;
 
             //Sinh coin, ở vị trí nào, hướng xoay (không đổi), là con của đối tượng nào
             //Instantiate(coin, new Vector3(viTriX, viTriY, 0),Quaternion.identity, transform); //Sinh ra một coin

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SocialPlatforms.Impl;
-public class pm2 : MonoBehaviour
+using System;
+public class playerMove : MonoBehaviour
 {
     //Khai báo biến nhân vật
     public Rigidbody2D rb; //private Rigidbody2D rb;
@@ -12,11 +13,10 @@ public class pm2 : MonoBehaviour
     //Khai báo biến tham số
     //Tốc độ di chuyển
     public float moveSpeed, jumpSpeed, jumpCount, jumpMax;
-    public TextMeshProUGUI Score;
+    public TextMeshProUGUI Score, ScoreDeath, HightScore;
 
-    private int tongDiem = 0;
+    private int tongDiem, HS;
     // Start is called before the first frame update
-
     void Start()
     {
         //Gán giá trị mặc định ban đầu cho tốc độ di chuyển, nhảy
@@ -29,24 +29,38 @@ public class pm2 : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         amt = GetComponent<Animator>();
         tinhDiem(0);
-    }
+        // tongDiem = PlayerPrefs.GetInt("Score");
+        HS = PlayerPrefs.GetInt("HighScore");
+        HightScore.text = "Điểm cao nhất là: " + HS.ToString("n0");
 
+    }
+    
     // Update is called once per frame
     void Update()
     {
 
         //Nếu phím 
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        {
             if (jumpCount < jumpMax)
             {
                 jumpCount++;
                 playerJump(jumpSpeed);
             }
         }
+
+        if (HS < tongDiem) 
+        {
+            HS = tongDiem;
+            PlayerPrefs.SetInt("HighScore", HS);
+            PlayerPrefs.Save();
+            // HightScore.text = "Điểm cao nhất là: " + HS.ToString("n0");
+        }
     }
     void tinhDiem (int score) {
             tongDiem += score;
-            Score.text = "" + tongDiem;
+            Score.text = ": " + tongDiem.ToString("n0");
+            ScoreDeath.text = "Điểm của bạn là: " + tongDiem.ToString("n0");
         }
         
     private void OnCollisionEnter2D(Collision2D other)
@@ -58,11 +72,14 @@ public class pm2 : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag =="coin")
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
+        if (other.gameObject.tag == "coin")
         {
+            PlayerPrefs.SetInt("Score", tongDiem);
+            
             Destroy(other.gameObject);
-            tinhDiem(1);
+            tinhDiem(1); // Tăng điểm khi nhặt được coin
         }
     }
     private void FixedUpdate()

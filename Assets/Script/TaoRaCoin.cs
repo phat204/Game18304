@@ -24,8 +24,8 @@ public class TaoRaCoin : MonoBehaviour
 
     void Start()
     {
-        _soCoin = 10;
-        _thoiGianVe = 3f;
+        _soCoin = 12;
+        _thoiGianVe = 3.5f;
         _khoangCachVe = 20f;
         _chieuCaoSin = 2f;
         _chieuRongSin = 2f;
@@ -65,12 +65,11 @@ public class TaoRaCoin : MonoBehaviour
         float _b; //d6 lech chieu cao, ngau nhien moi lan ve
         _b = Random. Range(0.2f, 0.7f);
         //Vị trí đầu tiên vẽ coin là vị trí người chơi, cộng thêm khoảng cách vẽ vào X, và chiều cao vào y
-        Vector3 _nextPos;
-        _nextPos = _player.position + new Vector3(_khoangCachVe, _chieuCaoToiThieu, 0); //
+        Vector3 _nextPos = _player.position + new Vector3(_khoangCachVe, _chieuCaoToiThieu, 0); //
         for (int i = -1*_soCoin2; i<= _soCoin2; i++ ) 
         {
             //y = -a*x*x + độ lệch để đưa đường parabol về gốc tọa độ. Trong đó a quyết định độ cong
-            Vector3 _toaDoVe = _nextPos + new Vector3(i + _soCoin2, -1 * _a * i * i + _a *_soCoin2*_soCoin2 + _b, 0f);
+            Vector3 _toaDoVe = _nextPos + new Vector3(i + _soCoin2, -1 * _a * i * i + _a *_soCoin + _b, 0f);
             Instantiate(_coinPrefab, _toaDoVe, Quaternion. identity, transform);
         }
     }

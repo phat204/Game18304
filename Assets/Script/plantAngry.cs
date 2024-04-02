@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class planAngry : MonoBehaviour
+public class plantAngry : MonoBehaviour
 {
     public GameObject _bullet;
     public Transform _bulletPos;
@@ -12,6 +12,7 @@ public class planAngry : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
+        _timer = 0.0f;
     }
 
     // Update is called once per frame
@@ -26,6 +27,13 @@ public class planAngry : MonoBehaviour
     }
     private void PlaintShoot ()
     {
-        Instantiate(_bullet, _bulletPos.position, Quaternion. identity);
+        GameObject tmp = Instantiate(_bullet, _bulletPos.position, Quaternion. identity);
+        Destroy(tmp, 3f);
+    }
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
