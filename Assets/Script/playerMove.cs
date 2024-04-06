@@ -13,26 +13,36 @@ public class playerMove : MonoBehaviour
     //Khai báo biến tham số
     //Tốc độ di chuyển
     public float moveSpeed, jumpSpeed, jumpCount, jumpMax;
-    public TextMeshProUGUI Score, ScoreDeath, HightScore;
-
-    private int tongDiem, HS;
+    public TextMeshProUGUI Score, ScoreDeath, HightScore, TopHightScore;
+    public GameObject thongBaoPanel;
+    public int tongDiem, HS, numHS;
+    public List<int> arrHS;
     // Start is called before the first frame update
     void Start()
     {
-        //Gán giá trị mặc định ban đầu cho tốc độ di chuyển, nhảy
-        // moveSpeed = 5f;
-        // jumpSpeed = 5f;
-        // jumpCount = 0;
-        // jumpMax = 2;
-        //Khi chạy, tự tìm 1 Rigidbody2D để gắn vào,
-        //Chỉ tìm các component bên trong nó
+
         rb = GetComponent<Rigidbody2D>();
         amt = GetComponent<Animator>();
         tinhDiem(0);
         // tongDiem = PlayerPrefs.GetInt("Score");
-        HS = PlayerPrefs.GetInt("HighScore");
-        HightScore.text = "Điểm cao nhất là: " + HS.ToString("n0");
 
+        HS = PlayerPrefs.GetInt("HighScore");
+        HightScore.text = "Hight score: " + HS.ToString("n0");
+        TopHightScore.text = "Hight score: \n" + HS.ToString("n0");
+        numHS = 3;
+        arrHS[0] = PlayerPrefs.GetInt("HighScore0");
+        arrHS[1] = PlayerPrefs.GetInt("HighScore1");
+        arrHS[2] = PlayerPrefs.GetInt("HighScore2");
+        // arrHS[3] = PlayerPrefs.GetInt("HighScore3");
+        // arrHS[4] = PlayerPrefs.GetInt("HighScore4");
+
+        HS = arrHS[numHS - 1];
+        TopHightScore.text = "Hight score: \n" + arrHS[0].ToString("n0")
+                                                + arrHS[1].ToString("n0")
+                                                + arrHS[2].ToString("n0")
+        //                                         + arrHS[3].ToString("n0")
+        //                                         + arrHS[4].ToString("n0")
+        ;
     }
     
     // Update is called once per frame
@@ -49,12 +59,40 @@ public class playerMove : MonoBehaviour
             }
         }
 
-        if (HS < tongDiem) 
+        if (rb == null)
         {
-            HS = tongDiem;
-            PlayerPrefs.SetInt("HighScore", HS);
-            PlayerPrefs.Save();
-            // HightScore.text = "Điểm cao nhất là: " + HS.ToString("n0");
+            if (tongDiem > HS) 
+            {
+                HS = tongDiem;
+                int viTriLuu = 0;
+                for (int i = 0; i < numHS; i++)
+                {
+                    if (HS > arrHS[i])
+                    {
+                        viTriLuu = i;
+                        break;
+                    }
+                }
+
+                for (int i = numHS - 1; i > viTriLuu; i--)
+                {
+                    arrHS[i] = arrHS[i-1];
+                }
+
+                arrHS[viTriLuu] = HS;
+
+                PlayerPrefs.SetInt("HighScore", HS);
+                PlayerPrefs.SetInt("HighScore0", arrHS[0]);
+                PlayerPrefs.SetInt("HighScore1", arrHS[1]);
+                PlayerPrefs.SetInt("HighScore2", arrHS[2]);
+                // PlayerPrefs.SetInt("HighScore3", arrHS[3]);
+                // PlayerPrefs.SetInt("HighScore0", arrHS[0]);
+                TopHightScore.text = "Hight score: \n" + arrHS[0].ToString("n0")
+                                                + arrHS[1].ToString("n0")
+                                                + arrHS[2].ToString("n0");
+                // PlayerPrefs.Save();
+                thongBaoPanel.SetActive(true);
+            }
         }
     }
     void tinhDiem (int score) {
